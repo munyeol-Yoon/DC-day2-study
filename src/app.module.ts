@@ -16,9 +16,11 @@ import { LoggingInterceptor } from './interceptors';
       envFilePath: `.env`,
       validationSchema,
     }),
+    // TypeOrmModule 참고 링크 : https://docs.nestjs.com/techniques/database
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
+      // useFactory 는 비동기적 접근 방법중 하나
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get<string>('DB_HOST'),
@@ -26,7 +28,7 @@ import { LoggingInterceptor } from './interceptors';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        autoLoadEntities: true,
+        autoLoadEntities: true, // 엔티티 자동 로드, 이거 안쓰면 [] 하고 하나씩 추가해야함
         synchronize: configService.get<string>('RUNTIME') !== 'prod',
         logging: configService.get<string>('RUNTIME') !== 'prod',
       }),
