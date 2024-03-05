@@ -8,7 +8,7 @@ export type ErrorDomain =
   | 'investment';
 
 export class BusinessException extends Error {
-  public readonly id: string;
+  public readonly id: string; // 예외 식별자
   public readonly timestamp: Date;
 
   constructor(

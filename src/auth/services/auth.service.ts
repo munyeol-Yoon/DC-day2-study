@@ -135,9 +135,9 @@ export class AuthService {
 
   createTokenPayload(userId: string): TokenPayload {
     return {
-      sub: userId,
-      iat: Math.floor(Date.now() / 1000),
-      jti: uuidv4(),
+      sub: userId, // subject : 대상자
+      iat: Math.floor(Date.now() / 1000), // issued at : 토큰 발급 시간
+      jti: uuidv4(), // JWT ID : 고유 식별자
     };
   }
 

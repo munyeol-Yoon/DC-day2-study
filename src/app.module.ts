@@ -17,10 +17,13 @@ import { LoggingInterceptor } from './interceptors';
       validationSchema,
     }),
     // TypeOrmModule 참고 링크 : https://docs.nestjs.com/techniques/database
+    // forRootAsync 를 통해 비동기 설정
     TypeOrmModule.forRootAsync({
+      // 환경변수 사용
       imports: [ConfigModule],
+      // inject 해 환경변수에 접근 가능
       inject: [ConfigService],
-      // useFactory 는 비동기적 접근 방법중 하나
+      // useFactory 는 비동기적 접근 방법중 하나, 설정 객체를 동적으로 생성하는 팩토리함수
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get<string>('DB_HOST'),
@@ -32,10 +35,12 @@ import { LoggingInterceptor } from './interceptors';
         synchronize: configService.get<string>('RUNTIME') !== 'prod',
         logging: configService.get<string>('RUNTIME') !== 'prod',
       }),
+      // 데이터 소스 생성
       async dataSourceFactory(options) {
         if (!options) {
           throw new Error('Invalid options passed');
         }
+        // 트랜잭션 관리가 가능한 데이터 소스 생성 후 반환
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
